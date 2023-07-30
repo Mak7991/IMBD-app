@@ -4,7 +4,7 @@ import firebaseConfig from "./firebase.config";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,7 +24,7 @@ class Firebase {
     try {
       const data = await createUserWithEmailAndPassword(auth, value.email, value.password)
       return data
-     
+
     }
     catch (err) {
       throw (err)
@@ -54,6 +54,8 @@ class Firebase {
       throw err; // Rethrow the error to be caught in the onLogout function
     }
   }
+
+  add_To_Favourite =  (id, data) =>  setDoc(doc(db, "favourite", id), { data })
 }
 
 const firebaseInstance = new Firebase();

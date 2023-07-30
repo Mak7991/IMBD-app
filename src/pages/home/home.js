@@ -6,6 +6,9 @@ import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';
 import NavbarMain from "../../components/navbar/navbar";
 import star from '../../assests/star_4855319.png'
+import firebaseInstance from '../../firebase';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from '../../firebase'
 
 const Home = () => {
 
@@ -13,7 +16,6 @@ const Home = () => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [filter, setfilter] = useState({ query: '' })
   const [data, setdata] = useState([])
-  const [refresh, setRefresh] = useState(false);
 
   const handleFilter = (ev) => {
     setfilter({ ...filter, query: ev.target.value })
@@ -40,20 +42,36 @@ const Home = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [refresh, filter]);
+  }, [filter]);
 
-  const handleAddtoFavourite = (row) => {
-    const payload = {
-      media_type: row?.media_type,
-      media_id: row?.id,
-      favorite: true
+  const handleAddtoFavourite =async (row) => {
+    if (row.media_type === "movie") {
+      await addDoc(collection(db, "movies"), {
+        id: row?.id,
+        title: row?.original_title,
+        release_date: row?.release_date,
+        image: `https://image.tmdb.org/t/p/w500/${row?.poster_path}`,
+        vote: row?.vote_average,
+        overview: row?.overview
+
+      }).then(() => {
+        toast("Your Item Was Added")
+      }).catch((err) => toast(err))
     }
-    add_To_Favourite(payload).then(() => {
-      toast.success('Add favourite successfully')
-    })
-      .catch(() => {
-        toast.error('Something went wrong')
+    else {
+      await addDoc(collection(db, "series"), {
+        id: row?.id,
+        title: row?.name,
+        release_date: row?.first_air_date,
+        image: `https://image.tmdb.org/t/p/w500/${row?.poster_path}`,
+        vote: row?.vote_average,
+        overview: row?.overview
+
+      }).then(() => {
+        toast("Your Item Was Added")
       })
+      .catch((err) => toast(err))
+    }
   }
 
 
@@ -84,7 +102,7 @@ const Home = () => {
               ) : (
                 data?.map((row) => {
                   return (
-                    <Col>
+                    <Col key={row?.id}>
                       <div className="movie-card" key={row?.id} onClick={() => handleAddtoFavourite(row)}>
                         <div className="movie-header" style={{ background: `url(https://image.tmdb.org/t/p/w500/${row?.poster_path})`, backgroundSize: 'cover' }}>
                         </div>

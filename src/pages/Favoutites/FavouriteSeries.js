@@ -6,6 +6,8 @@ import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';
 import NavbarMain from "../../components/navbar/navbar";
 import remove from '../../assests/delete_6861362.png'
+import { deleteDoc, getDocs, collection } from "firebase/firestore";
+import { db } from '../../firebase'
 
 const FavouritesSeries = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,23 +16,44 @@ const FavouritesSeries = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      const collectionRef = collection(db, 'series');
       setIsLoading(true);
-      get_Favourite_Tv().then((res) => {
-        setFirstLoad(false);
-        setSeries(res.data.results || [])
-      })
-        .catch(err => {
-          toast.error('failed to fetch series')
+      getDocs(collectionRef)
+        .then((querySnapshot) => {
+          setFirstLoad(false);
+          const dataArray = querySnapshot.docs.map((doc) => doc.data());
+          setSeries(dataArray || [])
+        })
+        .catch((err) => {
+          toast.error('failed to fetch movies')
           console.log(err)
         })
         .finally(() => {
           setIsLoading(false)
         })
     }, firstLoad ? 0 : 1000);
+
     return () => {
       clearTimeout(timeout)
     }
   }, [])
+
+
+  const handleDelete = async (row) => {
+    const productIDToDelete = row?.id;
+    const productRef = collection(db, 'series', productIDToDelete);
+    console.log(productRef)
+    await deleteDoc(productRef)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error('Error removing favourite: ', error);
+      })
+      .finally(() => {
+
+      })
+  }
 
 
 
@@ -50,7 +73,7 @@ const FavouritesSeries = () => {
                   return (
                     <Col key={row?.id}>
                       <div className="favourite-movie-card" key={row?.id}>
-                        <div className="movie-header" style={{ background: `url(https://image.tmdb.org/t/p/w500/${row?.poster_path})`, backgroundSize: 'cover' }}>
+                        <div className="movie-header" style={{ background: `url(${row?.image})`, backgroundSize: 'cover' }}>
                         </div>
                         <div className="movie-content">
                           <div className="movie-content-header">
@@ -65,10 +88,10 @@ const FavouritesSeries = () => {
                             </div>
                             <div className="info-section">
                               <label>Rating</label>
-                              <span>{row?.vote_average}/10</span>
+                              <span>{row?.vote}/10</span>
                             </div>
-                            <div className="info-section">
-                              <img src={remove} width={30} height={30}  />
+                            <div className="info-section" onClick={() => handleDelete(row)}>
+                              <img src={remove} width={30} height={30} />
                             </div>
                           </div>
                         </div>
