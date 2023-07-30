@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Container, FloatingLabel, Form, Row, Spinner } from 'react-bootstrap';
-import { add_To_Favourite, get_Movies_Series } from '../../Services/movies';
+import { get_Movies_Series } from '../../Services/movies';
 import './home.css'
 import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';

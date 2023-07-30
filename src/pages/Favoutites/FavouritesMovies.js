@@ -13,6 +13,7 @@ const FavouritesMovies = () => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [movies, setmovies] = useState([])
 
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       const collectionRef = collection(db, 'movies');
@@ -62,7 +63,7 @@ const FavouritesMovies = () => {
 
         <Container>
           <div className='movie-list mt-5'>
-            <Row xs={1} md={3} className="g-4">
+            <Row xs={1} md={9} className="g-4">
               {isLoading ? (
                 <Spinner size="md search-loader" />
               ) : (
