@@ -7,6 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import NavbarMain from "../../components/navbar/navbar";
 import star from '../../assests/star_4855319.png'
 
+
+import { db, storage } from "../../firebase.config";
+
+import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore'
+
 const Home = () => {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,19 +47,35 @@ const Home = () => {
     };
   }, [refresh, filter]);
 
-  const handleAddtoFavourite = (row) => {
-    const payload = {
-      media_type: row?.media_type,
-      media_id: row?.id,
-      favorite: true
+  const handleAddtoFavourite = async (row) => {
+    console.log(row)
+    if (row.media_type === "movie") {
+      await addDoc(collection(db, "movies"), {
+        title: row.title,
+        release_date: row?.release_date,
+        image: `https://image.tmdb.org/t/p/w500/${row?.poster_path}`,
+        vote: row?.vote_average,
+
+      }).then(() => {
+        toast("Your Item Was Added")
+      }).catch((err) => toast(err))
     }
-    add_To_Favourite(payload).then(() => {
-      toast.success('Add favourite successfully')
-    })
-      .catch(() => {
-        toast.error('Something went wrong')
-      })
+    else {
+      console.log("first")
+      await addDoc(collection(db, "series"), {
+        title: row.title,
+        release_date: row?.release_date,
+        image: `https://image.tmdb.org/t/p/w500/${row?.poster_path}`,
+        vote: row?.vote_average,
+
+      }).then(() => {
+        toast("Your Item Was Added")
+      }).catch((err) => toast(err))
+    }
+
   }
+
+
 
 
   return (
