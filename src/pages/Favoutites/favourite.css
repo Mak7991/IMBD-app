@@ -1,0 +1,119 @@
+.favourite-page{
+    overflow-x: scroll;
+    display: flex;
+}
+.movie-list {
+  display: flex;
+  padding: 10px;
+}
+.favourite-movie-card {
+  background: #ffffff;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 355px;
+  margin: auto;
+  max-height: 550px;
+  border-radius: 10px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.movie-header {
+  padding: 0;
+  margin: 0;
+  height: 367px;
+  width: 100%;
+  display: block;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.movie-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.movie-content {
+  padding: 18px 18px 24px 18px;
+  margin: 0;
+}
+
+.movie-content-header,
+.movie-info {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.movie-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: black;
+}
+
+.imax-logo {
+  width: 50px;
+  height: 15px;
+  background: url("https://6a25bbd04bd33b8a843e-9626a8b6c7858057941524bfdad5f5b0.ssl.cf5.rackcdn.com/media_kit/3e27ede823afbf139c57f1c78a03c870.jpg")
+    no-repeat;
+  background-size: contain;
+  display: table-cell;
+  float: right;
+  position: relative;
+  margin-top: 5px;
+}
+
+.movie-info {
+  margin-top: 1em;
+}
+
+.info-section {
+  display: table-cell;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.info-section:first-of-type {
+  text-align: left;
+}
+
+.info-section:last-of-type {
+  text-align: right;
+}
+
+.info-section label {
+  display: block;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5em;
+  font-size: 9px;
+}
+
+.info-section span {
+  font-weight: 700;
+  font-size: 11px;
+}
+.no-record {
+  margin: auto;
+  text-align: center;
+}
+.search-loader {
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+}
+@media screen and (max-width: 500px) {
+  .movie-card {
+    width: 95%;
+    max-width: 95%;
+    margin: 1em;
+    display: block;
+  }
+
+  .container {
+    padding: 0;
+    margin: 0;
+  }
+}
